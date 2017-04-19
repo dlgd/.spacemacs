@@ -37,7 +37,6 @@ values."
      yaml
      (haskell :variables haskell-completion-backend
               'intero haskell-process-type 'stack-ghci)
-     markdown
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
@@ -48,8 +47,8 @@ values."
      ;; better-defaults
      emacs-lisp
      git
-     gtags
-     ;; markdown
+     (gtags :variables gtags-enable-by-default t)
+     markdown
      org
      perforce
      ;; (shell :variables
@@ -316,8 +315,31 @@ you should place your code here."
   (global-set-key [S-up] 'windmove-up)
   (global-set-key [S-down] 'windmove-down)
 
+  ;; Directly going to a line
+  (global-set-key "\C-x\C-g" 'goto-line)
+
+  ;; Compile
+  (global-set-key [f9] 'compile)
+
+  ;; Deletes all spaces and tabs around the point, leaving just one space
+  (global-set-key (kbd "C-c SPC") 'just-one-space)
+
+  ;; Switch between header/source and the corresponding source/header file
+  (global-set-key (kbd "C-x o") 'ff-find-other-file)
+
+  ;; intero
   (with-eval-after-load 'intero
     (flycheck-add-next-checker 'intero '(warning . haskell-hlint)))
+
+  ;; c style
+  (c-add-style "mx" '("bsd"
+                      (c-basic-offset . 3)
+                      (c-offsets-alist . ((innamespace . [0])))))
+  (setq c-default-style "mx")
+
+  (add-hook 'c-mode-hook 'ggtags-mode)
+  (add-hook 'c++-mode-hook 'ggtags-mode)
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
